@@ -31,23 +31,8 @@ const Gallery = ({ tours, setTours, onRemove }) => {
     if (error) {
         return <div>{error}</div>;
       }
-  // Fetch tours from an API
-  useEffect(() => {
-    const fetchTours = async () => {
-      setLoading(true);
-      //setError(null); // Reset error state    
-      try {
-        const response = await fetch("https://api.example.com/tours");
-        const data = await response.json();
-        setTours(data);
-      } catch (error) {
-        console.error("Error fetching tours:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTours();
+    useEffect(() => {
+        fetchTours();
   }, [setTours]);
     //Loading message while fetching tours
   if (loading) {
