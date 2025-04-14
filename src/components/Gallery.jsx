@@ -16,14 +16,26 @@ const Gallery = ({ tours, setTours, onRemove }) => {
       const data = await response.json();
       setTours(data);
     } catch (error) {
-      setError(error);
+      setError(error.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   }
 
   useEffect(() => {
+    fetchTours();
+    }, [setTours]);
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+    if (error) {
+        return <div>{error}</div>;
+      }
+  // Fetch tours from an API
+  useEffect(() => {
     const fetchTours = async () => {
+      setLoading(true);
+      //setError(null); // Reset error state    
       try {
         const response = await fetch("https://api.example.com/tours");
         const data = await response.json();
@@ -58,3 +70,4 @@ const Gallery = ({ tours, setTours, onRemove }) => {
     </div>
   );
 }
+export default Gallery;
