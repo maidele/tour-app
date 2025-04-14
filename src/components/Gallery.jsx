@@ -37,10 +37,14 @@ const Gallery = ({ tours, setTours, onRemove }) => {
 
     fetchTours();
   }, [setTours]);
-
+    //Loading message while fetching tours
   if (loading) {
     return <div>Loading...</div>;
   }
+    // Error message in case their is a failure when fetching tours 
+    if (error) {
+        return <div>{error}</div>;
+      }    
 
   if(tours.length === 0) {
     return <div>No tours available</div>;
