@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react"; //
-
+import React, { useEffect, useState } from "react";
 import TourCard from "./TourCard";
 
-//
 const Gallery = ({ tours, setTours, onRemove }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   const fetchTours = async () => {
     try {
@@ -20,39 +19,49 @@ const Gallery = ({ tours, setTours, onRemove }) => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     fetchTours();
-    }, [setTours]);
-    if (loading) {
-      return <div>Loading...</div>;
-    }
-    if (error) {
-        return <div>{error}</div>;
-      }
-    useEffect(() => {
-        fetchTours();
   }, [setTours]);
-    //Loading message while fetching tours
+
   if (loading) {
     return <div>Loading...</div>;
   }
-    // Error message in case their is a failure when fetching tours 
-    if (error) {
-        return <div>{error}</div>;
-      }    
 
-  if(tours.length === 0) {
-    return <div>No tours available</div>;
+  if (error) {
+    return <div>{error}</div>;
   }
+
+  const filteredTours =
+    selectedCategory === "all"
+      ? tours
+      : tours.filter((tour) => tour.category === selectedCategory);
 
   return (
     <div className="gallery">
-      {tours.map((tour) => (
-        <TourCard key={tour.id} tour={tour} onRemove={onRemove} />
-      ))}
+      <div className="filter">
+        <label htmlFor="category">Filter by Category: </label>
+        <select
+          id="category"
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+        >
+          <option value="all">All</option>
+          <option value="adventure">Adventure</option>
+          <option value="cultural">Cultural</option>
+          <option value="relaxation">Relaxation</option>
+        </select>
+      </div>
+      {filteredTours.length === 0 ? (
+        <div>No tours available</div>
+      ) : (
+        filteredTours.map((tour) => (
+          <TourCard key={tour.id} {...tour} onRemove={onRemove} />
+        ))
+      )}
     </div>
   );
-}
+};
+
 export default Gallery;
